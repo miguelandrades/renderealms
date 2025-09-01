@@ -17,7 +17,6 @@ export default async function migrations(request, response) {
       });
 
       if (migrations.length > 0 && request.method === "POST") {
-        await dbClient.end();
         return response.status(201).json({
           message:
             request.method === "POST"
@@ -27,8 +26,6 @@ export default async function migrations(request, response) {
         });
       }
 
-      await dbClient.end();
-
       return response.status(200).json({
         message: "No migrations to run",
         migrations,
@@ -36,8 +33,12 @@ export default async function migrations(request, response) {
     } catch (error) {
       console.error("Migration error:", error);
       return response.status(500).json({ error: error.message });
+    } finally {
+      await dbClient.end();
     }
   }
 
-  return response.status(405).json({ error: "Method Not Allowed" });
+  return response
+    .status(405)
+    .json({ error: `Method ${request.method} Not Allowed` });
 }
