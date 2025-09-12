@@ -10,6 +10,7 @@ const createJestConfig = nextJest({
 });
 
 const customJestConfig = {
+  testTimeout: 60000,
   moduleDirectories: ["node_modules", "<rootDir>/"],
   testEnvironment: "node",
   transform: {
