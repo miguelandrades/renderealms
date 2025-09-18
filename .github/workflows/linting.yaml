@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   prettier:
-    name: jest-ubuntu
+    name: prettier-liting
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,8 +17,8 @@ jobs:
 
       - run: npm run lint:prettier:check
 
-      prettier:
-    name: jest-ubuntu
+  eslint:
+    name: eslint-liting
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,4 +29,4 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run lint:prettier:check
+      - run: npm run lint:eslint:check
