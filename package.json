@@ -26,6 +26,8 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-react": "^7.27.1",
     "@babel/runtime": "^7.28.3",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^20.0.0",
     "babel-jest": "^30.1.1",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
