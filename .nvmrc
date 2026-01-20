@@ -1,1 +1,1 @@
-echo "lts/hydrogen" > .nvmrc
+lts/hydrogen
