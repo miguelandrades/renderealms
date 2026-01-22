@@ -12,12 +12,12 @@ describe("GET api/v1/status", () => {
 
       const responseBody = await response.json();
 
-      const parsedUpdatedAt = new Date(responseBody.uptade_at).toISOString();
-      expect(responseBody.uptade_at).toEqual(parsedUpdatedAt);
+      const parsedUpdatedAt = new Date(responseBody.updated_at).toISOString();
+      expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
 
-      expect(responseBody.dependecies.database.version).toEqual("16.0");
-      expect(responseBody.dependecies.database.max_connections).toEqual(100);
-      expect(responseBody.dependecies.database.open_connections).toEqual(1);
+      expect(responseBody.dependencies.database.version).toEqual("16.0");
+      expect(responseBody.dependencies.database.max_connections).toEqual(100);
+      expect(responseBody.dependencies.database.open_connections).toEqual(1);
     });
   });
 });
