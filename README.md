@@ -17,7 +17,7 @@ O objetivo do projeto é construir uma aplicação real aplicando conceitos impo
 
 A aplicação possui endpoints como `/api/v1/status`, responsáveis por verificar a saúde do sistema e do banco de dados, além de rotas para gerenciamento de migrations.
 
-O projeto também explora ferramentas modernas do ecossistema JavaScript, como:
+O projeto também explora ferramentas modernas como ecossistema JavaScript, como:
 
 - **Next.js**
 - **next-connect**
