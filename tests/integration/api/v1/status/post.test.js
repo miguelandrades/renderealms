@@ -16,7 +16,7 @@ describe("GET api/v1/status", () => {
       expect(response.status).toBe(405);
       expect(responseBody).toEqual({
         name: "MethodNotAllowedError",
-        message: "405 Method Not Allowed",
+        message: "Method Not Allowed",
         action: "Use the correct HTTP method for this endpoint.",
         statusCode: 405,
       });
