@@ -1,9 +1,10 @@
 export class InternalServerError extends Error {
-  constructor({ cause }) {
-    super("Um erro interno inesperado aconteceu", { cause });
+  constructor({ cause, statusCode }) {
+    super("Internal Server Error", { cause });
     this.name = "InternalServerError";
-    this.action = "Entre em contato com o suporte.";
-    this.statusCode = 500;
+    this.action =
+      "An unexpected error occurred on the server. Please try again later.";
+    this.statusCode = statusCode || 500;
   }
 
   toJSON() {
@@ -11,7 +12,43 @@ export class InternalServerError extends Error {
       name: this.name,
       message: this.message,
       action: this.action,
-      status_code: this.statusCode,
+      statusCode: this.statusCode,
+    };
+  }
+}
+
+export class ServiceError extends Error {
+  constructor({ cause, message }) {
+    super(message || "Service Unavailable", { cause });
+    this.name = "ServiceError";
+    this.action = "Service unavailable on moment. Please try again later.";
+    this.statusCode = 503;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      statusCode: this.statusCode,
+    };
+  }
+}
+
+export class MethodNotAllowedError extends Error {
+  constructor() {
+    super("Method Not Allowed");
+    this.name = "MethodNotAllowedError";
+    this.action = "Use the correct HTTP method for this endpoint.";
+    this.statusCode = 405;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      statusCode: this.statusCode,
     };
   }
 }
