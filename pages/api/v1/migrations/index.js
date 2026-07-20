@@ -1,44 +1,65 @@
 import migrationRunner from "node-pg-migrate";
 import { resolve } from "node:path";
 import database from "infra/database";
+import { createRouter } from "next-connect";
+import controller from "infra/controller.js";
 
-export default async function migrations(request, response) {
-  if (request.method === "GET" || request.method === "POST") {
-    const dbClient = await database.getNewClient();
+const defaultMigrationsOptions = {
+  dryRun: false,
+  dir: resolve("infra", "migrations"),
+  direction: "up",
+  verbose: true,
+  migrationsTable: "pgmigrations",
+};
 
-    try {
-      const migrations = await migrationRunner({
-        dbClient: dbClient,
-        dryRun: request.method === "GET",
-        dir: resolve("infra", "migrations"),
-        direction: "up",
-        verbose: true,
-        migrationsTable: "pgmigrations",
-      });
+async function getHandler(request, response) {
+  const dbClient = await database.getNewClient();
 
-      if (migrations.length > 0 && request.method === "POST") {
-        return response.status(201).json({
-          message:
-            request.method === "POST"
-              ? "Migrations applied"
-              : "Pending migrations",
-          migrations,
-        });
-      }
+  try {
+    const migrations = await migrationRunner({
+      ...defaultMigrationsOptions,
+      dbClient: dbClient,
+      dryRun: true,
+    });
 
-      return response.status(200).json({
-        message: "No migrations to run",
+    return response.status(200).json({
+      message: "No migrations to run",
+      migrations,
+    });
+  } finally {
+    await dbClient.end();
+  }
+}
+
+async function postHandler(request, response) {
+  const dbClient = await database.getNewClient();
+
+  try {
+    const migrations = await migrationRunner({
+      ...defaultMigrationsOptions,
+      dbClient: dbClient,
+    });
+
+    if (migrations.length > 0) {
+      return response.status(201).json({
+        message: "Migrations applied",
         migrations,
       });
-    } catch (error) {
-      console.error("Migration error:", error);
-      return response.status(500).json({ error: error.message });
-    } finally {
-      await dbClient.end();
     }
-  }
 
-  return response
-    .status(405)
-    .json({ error: `Method ${request.method} Not Allowed` });
+    return response.status(200).json({
+      message: "No migrations to run",
+      migrations,
+    });
+  } finally {
+    await dbClient.end();
+  }
 }
+
+const router = createRouter();
+
+router.get(getHandler);
+
+router.post(postHandler);
+
+export default router.handler(controller.errorHandlers);
